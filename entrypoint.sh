@@ -25,13 +25,13 @@ else
 
   if [ -z "$GROUP" ]
   then
-    GROUP=rclone
+    GROUP=dijnetbot
     addgroup --gid "${PGID}" "$GROUP"
   fi
 
   if [ -z "$USER" ]
   then
-    USER=rclone
+    USER=dijnetbot
     adduser \
       --disabled-password \
       --gecos "" \
@@ -53,15 +53,15 @@ rm -f /tmp/sync.pid
 
 # Check for source and destination ; launch config if missing
 
-if [ -z "$SYNC_SRC" ]; then
-  echo "INFO: No SYNC_SRC defined. Stopping"
+if [ -z "${DIJNET_USER}" ]; then
+  echo "INFO: No DIJNET_USER defined. Stopping"
   exit 1
 else
   if [ -z "${SYNC_ON_STARTUP}" ]
   then
-    echo "INFO: Add SYNC_ON_STARTUP=1 to perform a sync upon boot"
+    echo "INFO: Add SYNC_ON_STARTUP=true to perform a sync upon boot"
   else
-    su "$USER" -c /usr/bin/rclone-sync.sh
+    su "$USER" -c dijnet-bot
   fi
 
   # Re-write cron shortcut
@@ -84,12 +84,12 @@ else
   else
     # Setup cron schedule
     crontab -d
-    echo "$CRONS su $USER -c /usr/bin/rclone-sync.sh >> /var/log/rclone/rclone-sync.crontab.log 2>&1" > /tmp/crontab.tmp
+    echo "$CRONS su $USER -c dijnet-bot >> /var/log/dinet-bot/dinet-bot.crontab.log 2>&1" > /tmp/crontab.tmp
     if [ -z "$CRON_ABORT" ]
     then
       echo "INFO: Add CRON_ABORT=\"0 6 * * *\" to cancel outstanding sync at 6am"
     else
-      echo "$CRON_ABORT /usr/bin/rclone-sync-abort.sh >> /var/log/rclone/rclone-sync.crontab.log 2>&1" >> /tmp/crontab.tmp
+      echo "$CRON_ABORT dijnet-bot >> /var/log/dinet-bot/dinet-bot.crontab.log 2>&1" >> /tmp/crontab.tmp
     fi
     crontab /tmp/crontab.tmp
     rm /tmp/crontab.tmp
