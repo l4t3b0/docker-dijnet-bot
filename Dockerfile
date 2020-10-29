@@ -30,7 +30,7 @@ RUN apk --no-cache add \
   wget
 
 RUN curl -SL https://github.com/juzraai/dijnet-bot/archive/${DIJNET_VERSION}.tar.gz \
-  | tar -xJC /tmp \
+  | tar -xzvC /tmp \
   cd /tmp/dijnet-bot-2.1.6 \
   && npm i -g
 
