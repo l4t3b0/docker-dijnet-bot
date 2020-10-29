@@ -27,6 +27,7 @@ RUN apk --no-cache add \
   curl \
   nodejs \
   npm \
+  tzdata \
   wget
 
 RUN curl -SL https://github.com/juzraai/dijnet-bot/archive/${DIJNET_VERSION}.tar.gz \
