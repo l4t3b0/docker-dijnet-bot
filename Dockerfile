@@ -31,13 +31,13 @@ RUN apk --no-cache add \
 
 RUN curl -SL https://github.com/juzraai/dijnet-bot/archive/${DIJNET_VERSION}.tar.gz \
   | tar -xzvC /tmp \
-  cd /tmp/dijnet-bot-2.1.6 \
-  && npm i -g
+  && npm i -g /tmp/dijnet-bot-2.1.6
 
 RUN mkdir /data
-RUN mkdir /var/log/dinet-bot && chown ${PUID}:${PGID} /var/log/dinet-bot && chmod 775 /var/log/dinet-bot
+RUN mkdir /var/log/dijnet-bot && chown ${PUID}:${PGID} /var/log/dijnet-bot && chmod 775 /var/log/dijnet-bot
 
 COPY entrypoint.sh /
+COPY dijnet-bot-sync.sh /usr/bin
 
 VOLUME ["/var/log/dijnet-bot"]
 VOLUME ["/data"]
