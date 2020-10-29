@@ -21,11 +21,17 @@ ENV TZ=
 ENV PUID=0
 ENV PGID=0
 
-RUN apk --no-cache add bash ca-certificates nodejs npm wget
+RUN apk --no-cache add \
+  bash \
+  ca-certificates \
+  curl \
+  nodejs \
+  npm \
+  wget
 
-ADD https://github.com/juzraai/dijnet-bot/archive/${DIJNET_VERSION}.tar.gz /tmp
-
-RUN cd /tmp/dijnet-bot-2.1.6 \
+RUN curl -SL https://github.com/juzraai/dijnet-bot/archive/${DIJNET_VERSION}.tar.gz \
+  | tar -xJC /tmp \
+  cd /tmp/dijnet-bot-2.1.6 \
   && npm i -g
 
 RUN mkdir /data
