@@ -20,7 +20,11 @@ exec_on_startup() {
   then
     echo "INFO: Add SYNC_ON_STARTUP=true to perform a sync upon boot"
   else
+    echo TEEEEEEEEEEEEEEEEEST 1
+    su dijnet-bot -c pwd
+    echo TEEEEEEEEEEEEEEEEEST 2
     su "$USER" -c /usr/bin/dijnet-bot-sync.sh
+    echo TEEEEEEEEEEEEEEEEEST 3
   fi
 }
 
