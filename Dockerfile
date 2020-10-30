@@ -20,6 +20,9 @@ ENV HEALTHCHECKS_IO_URL=
 
 ENV USER=dijnet-bot
 ENV GROUP=dijnet-bot
+ENV DIJNET_PID_DIR=/var/run/${USER}
+ENV DIJNET_PID_FILE=${DIJNET_PID_DIR}/${USER}.pid
+ENV DIJNET_LOG_DIR=/var/log/${USER}
 
 RUN apk --no-cache add \
   bash \
@@ -39,7 +42,8 @@ RUN groupadd ${GROUP} && \
   useradd -s /bin/false ${USER} -g ${GROUP}
 
 RUN mkdir /data
-RUN mkdir /var/log/dijnet-bot
+RUN mkdir ${DIJNET_LOG_DIR} && chown 755 ${DIJNET_LOG_DIR}
+RUN mkdir ${DIJNET_PID_DIR} && chown 755 ${DIJNET_PID_DIR}
 
 COPY root/ /
 

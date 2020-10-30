@@ -71,8 +71,8 @@ rotate_logs() {
 
 set -e
 
-pid_file=/var/lock/dijnet-bot-sync.pid
-log_dir=/var/run/dijnet-bot
+pid_file/${DIJNET_PID_FILE}
+log_dir=${DIJNET_LOG_DIR}
 
 echo "INFO: Starting sync.sh pid $$ $(date)"
 

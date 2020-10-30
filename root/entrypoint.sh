@@ -20,13 +20,9 @@ exec_on_startup() {
   then
     echo "INFO: Add SYNC_ON_STARTUP=true to perform a sync upon boot"
   else
-    echo TEEEEEEEEEEEEEEEEEST 1
     set +e
-    su dijnet-bot -s /bin/sh -c pwd
-    echo TEEEEEEEEEEEEEEEEEST 2
-    su "$USER" -s /bin/sh -c /usr/bin/dijnet-bot-sync.sh
+    su "${USER}" -s /bin/sh -c /usr/bin/dijnet-bot-sync.sh
     set -e
-    echo TEEEEEEEEEEEEEEEEEST 3
   fi
 }
 
@@ -38,12 +34,12 @@ init_cron() {
   else
     # Setup cron schedule
     crontab -d
-    echo "${CRON} su $USER -c /usr/bin/dijnet-bot-sync.sh >> /var/log/dijnet-bot/dijnet-bot-sync.crontab.log 2>&1" > /tmp/crontab.tmp
+    echo "${CRON} su ${USER} -s /bin/sh -c /usr/bin/dijnet-bot-sync.sh >> ${DIJNET_LOG_DIR}/dijnet-bot-sync.crontab.log 2>&1" > /tmp/crontab.tmp
     if [ -z "$CRON_ABORT" ]
     then
       echo "INFO: Add CRON_ABORT=\"0 6 * * *\" to cancel outstanding sync at 6am"
     else
-      echo "$CRON_ABORT /usr/bin/dijnet-bot-sync-abort.sh >> /var/log/dijnet-bot/dijnet-bot-sync-abort.crontab.log 2>&1" >> /tmp/crontab.tmp
+      echo "$CRON_ABORT /usr/bin/dijnet-bot-sync-abort.sh >> ${DIJNET_LOG_DIR}/dijnet-bot-sync-abort.crontab.log 2>&1" >> /tmp/crontab.tmp
     fi
     crontab /tmp/crontab.tmp
     rm /tmp/crontab.tmp
@@ -79,6 +75,7 @@ init_user() {
   echo "INFO: Configuring directories ownership. PUID=${PUID}; PGID=${PGID};"
   chown -R ${USER}:${GROUP} /data
   chown -R ${USER}:${GROUP} /var/log/dijnet-bot
+  chown -R ${USER}:${GROUP} /var/run/dijnet-bot
 }
 
 set -e
