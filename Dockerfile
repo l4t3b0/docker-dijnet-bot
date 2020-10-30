@@ -47,7 +47,7 @@ RUN mkdir ${DIJNET_PID_DIR} && chown 755 ${DIJNET_PID_DIR}
 
 COPY root/ /
 
-VOLUME ["/var/log/dijnet-bot"]
+VOLUME [${DIJNET_LOG_DIR}]
 VOLUME ["/data"]
 
 ENTRYPOINT ["/entrypoint.sh"]
