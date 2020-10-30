@@ -2,16 +2,16 @@
 
 eval_cron_shortcuts() {
   # Re-write cron shortcut
-  case "$(echo "$CRON" | tr '[:lower:]' '[:upper:]')" in
-    *@YEARLY* ) echo "INFO: Cron shortcut $CRON re-written to 0 0 1 1 *" && CRONS="0 0 1 1 *";;
-    *@ANNUALLY* ) echo "INFO: Cron shortcut $CRON re-written to 0 0 1 1 *" && CRONS="0 0 1 1 *";;
-    *@MONTHLY* ) echo "INFO: Cron shortcut $CRON re-written to 0 0 1 * *" && CRONS="0 0 1 * * ";;
-    *@WEEKLY* ) echo "INFO: Cron shortcut $CRON re-written to 0 0 * * 0" && CRONS="0 0 * * 0";;
-    *@DAILY* ) echo "INFO: Cron shortcut $CRON re-written to 0 0 * * *" && CRONS="0 0 * * *";;
-    *@MIDNIGHT* ) echo "INFO: Cron shortcut $CRON re-written to 0 0 * * *" && CRONS="0 0 * * *";;
-    *@HOURLY* ) echo "INFO: Cron shortcut $CRON re-written to 0 * * * *" && CRONS="0 * * * *";;
-    *@* ) echo "WARNING: Cron shortcut $CRON is not supported. Stopping." && exit 1;;
-    * ) CRONS=$CRON;;
+  case "$(echo "${CRON}" | tr '[:lower:]' '[:upper:]')" in
+    *@YEARLY* ) echo "INFO: Cron shortcut ${CRON} re-written to 0 0 1 1 *" && CRONS="0 0 1 1 *";;
+    *@ANNUALLY* ) echo "INFO: Cron shortcut ${CRON} re-written to 0 0 1 1 *" && CRONS="0 0 1 1 *";;
+    *@MONTHLY* ) echo "INFO: Cron shortcut ${CRON} re-written to 0 0 1 * *" && CRONS="0 0 1 * * ";;
+    *@WEEKLY* ) echo "INFO: Cron shortcut ${CRON} re-written to 0 0 * * 0" && CRONS="0 0 * * 0";;
+    *@DAILY* ) echo "INFO: Cron shortcut ${CRON} re-written to 0 0 * * *" && CRONS="0 0 * * *";;
+    *@MIDNIGHT* ) echo "INFO: Cron shortcut ${CRON} re-written to 0 0 * * *" && CRONS="0 0 * * *";;
+    *@HOURLY* ) echo "INFO: Cron shortcut ${CRON} re-written to 0 * * * *" && CRONS="0 * * * *";;
+    *@* ) echo "WARNING: Cron shortcut ${CRON} is not supported. Stopping." && exit 1;;
+    * ) CRONS=${CRON};;
   esac
 }
 
@@ -25,14 +25,14 @@ exec_on_startup() {
 }
 
 init_cron() {
-  if [ -z "$CRONS" ]
+  if [ -z "${CRON}" ]
   then
     echo "INFO: No CRON setting found. Stopping. (Tip: Add CRON=\"0 0 * * *\" to perform sync every midnight)"
     exit 1
   else
     # Setup cron schedule
     crontab -d
-    echo "$CRONS su $USER -c /usr/bin/dijnet-bot-sync.sh >> /var/log/dijnet-bot/dijnet-bot-sync.crontab.log 2>&1" > /tmp/crontab.tmp
+    echo "${CRON} su $USER -c /usr/bin/dijnet-bot-sync.sh >> /var/log/dijnet-bot/dijnet-bot-sync.crontab.log 2>&1" > /tmp/crontab.tmp
     if [ -z "$CRON_ABORT" ]
     then
       echo "INFO: Add CRON_ABORT=\"0 6 * * *\" to cancel outstanding sync at 6am"
@@ -56,18 +56,21 @@ init_timezone() {
   # Set time zone if passed in
   if [ ! -z "${TZ}" ]
   then
+    echo "INFO: Configuring timezone for: ${TZ}." 
+
     cp /usr/share/zoneinfo/${TZ} /etc/localtime
     echo ${TZ} > /etc/timezone
   fi
 }
 
 init_user() {
-  PUID=${PUID:-911}
-  PGID=${PGID:-911}
+  PUID=${PUID:-$(id -u dijnet-bot)}
+  PGID=${PGID:-$(id -g dijnet-bot)}
 
-  groupmod -o -g "$PGID" ${GROUP}
-  usermod -o -u "$PUID" ${USER}
+  groupmod -o -g "${PGID}" ${GROUP}
+  usermod -o -u "${PUID}" ${USER}
 
+  echo "INFO: Configuring directories ownership. PUID=${PUID}; PGID=${PGID};"
   chown ${USER}:${GROUP} /data
   chown ${USER}:${GROUP} /var/log/dijnet-bot
 }
