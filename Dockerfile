@@ -36,8 +36,7 @@ RUN curl -SL https://github.com/juzraai/dijnet-bot/archive/v${DIJNET_VERSION}.ta
   && npm i -g /tmp/dijnet-bot-${DIJNET_VERSION}
 
 RUN groupadd ${GROUP} && \
-  useradd -s /bin/false ${USER} && \
-  usermod -G ${GROUP} ${USER}
+  useradd -s /bin/false ${USER} -g ${GROUP}
 
 RUN mkdir /data
 RUN mkdir /var/log/dijnet-bot
