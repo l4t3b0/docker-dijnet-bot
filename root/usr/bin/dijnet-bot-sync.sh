@@ -44,7 +44,7 @@ is_dijnet_bot_running() {
 dijnet_bot_cmd_exec() {
   CMD="dijnet-bot"
 
-  if [ ! -z "$LOG_ENABLED" ]
+  if [ ! -z "$LOG_MODE" ]
   then
     d=$(date +%Y_%m_%d-%H_%M_%S)
     LOG_FILE="${log_dir}/dijnet-bot-$d.log"
@@ -74,7 +74,7 @@ set -e
 pid_file=${DIJNET_PID_FILE}
 log_dir=${DIJNET_LOG_DIR}
 
-echo "INFO: Starting sync.sh pid $$ $(date)"
+echo "INFO: Starting $0 pid $$ $(date)"
 
 if is_dijnet_bot_running
 then
