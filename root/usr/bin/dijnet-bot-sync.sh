@@ -71,7 +71,7 @@ rotate_logs() {
 
 set -e
 
-pid_file/${DIJNET_PID_FILE}
+pid_file=${DIJNET_PID_FILE}
 log_dir=${DIJNET_LOG_DIR}
 
 echo "INFO: Starting sync.sh pid $$ $(date)"
