@@ -66,16 +66,16 @@ init_timezone() {
 }
 
 init_user() {
-  PUID=${PUID:-$(id -u dijnet-bot)}
-  PGID=${PGID:-$(id -g dijnet-bot)}
+  PUID=${PUID:-$(id -u ${USER})}
+  PGID=${PGID:-$(id -g ${GROUP})}
 
   groupmod -o -g "${PGID}" ${GROUP}
   usermod -o -u "${PUID}" ${USER}
 
   echo "INFO: Configuring directories ownership. PUID=${PUID}; PGID=${PGID};"
   chown -R ${USER}:${GROUP} /data
-  chown -R ${USER}:${GROUP} /var/log/dijnet-bot
-  chown -R ${USER}:${GROUP} /var/run/dijnet-bot
+  chown -R ${USER}:${GROUP} ${DIJNET_LOG_DIR}
+  chown -R ${USER}:${GROUP} ${DIJNET_PID_DIR}
 }
 
 set -e
