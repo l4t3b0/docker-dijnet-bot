@@ -27,6 +27,7 @@ RUN apk --no-cache add \
   curl \
   nodejs \
   npm \
+  shadow \
   tzdata \
   wget
 
@@ -34,8 +35,9 @@ RUN curl -SL https://github.com/juzraai/dijnet-bot/archive/v${DIJNET_VERSION}.ta
   | tar -xzvC /tmp \
   && npm i -g /tmp/dijnet-bot-${DIJNET_VERSION}
 
-RUN useradd -u 911 -U -d /config -s /bin/false ${USER} && \
-  usermod -G users 
+RUN groupadd ${GROUP} && \
+  useradd -s /bin/false ${USER} && \
+  usermod -G ${GROUP} ${USER}
 
 RUN mkdir /data
 RUN mkdir /var/log/dijnet-bot
