@@ -20,9 +20,7 @@ exec_on_startup() {
   then
     echo "INFO: Add SYNC_ON_STARTUP=true to perform a sync upon boot"
   else
-echo TEEEEEEEEEEEEEEEEEEEEEEEEEEEEST1 $USER
     su "$USER" -c /usr/bin/dijnet-bot-sync.sh
-echo TEEEEEEEEEEEEEEEEEEEEEEEEEEEEST2
   fi
 }
 
