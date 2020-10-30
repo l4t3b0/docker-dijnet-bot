@@ -22,9 +22,9 @@ exec_on_startup() {
   else
     echo TEEEEEEEEEEEEEEEEEST 1
     set +e
-    su dijnet-bot -c pwd
+    su dijnet-bot -s /bin/sh -c pwd
     echo TEEEEEEEEEEEEEEEEEST 2
-    su "$USER" -c /usr/bin/dijnet-bot-sync.sh
+    su "$USER" -s /bin/sh -c /usr/bin/dijnet-bot-sync.sh
     set -e
     echo TEEEEEEEEEEEEEEEEEST 3
   fi
