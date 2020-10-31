@@ -50,7 +50,7 @@ else
 
   healthchecks_io_start 
 
-  purge_logs ${log_dir} ${LOG_ROTATE}
+  logs_purge ${log_dir} ${LOG_ROTATE}
 
   dijnet_bot_cmd_exec
 
