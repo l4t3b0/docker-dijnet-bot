@@ -46,11 +46,13 @@ else
   echo "INFO: PID file created successfuly: ${pid_file}"
 
   echo "INFO: Reading config file: ${CONFIG_FILE}"
-  xargs -a ${CONFIG_FILE} -r
+  set -o allexport
+  . ${CONFIG_FILE}
+  set +o allexport
 
   healthchecks_io_start 
 
-  logs_purge ${log_dir} ${LOG_ROTATE}
+  logs_purge ${log_dir} ${LOG_PURGE}
 
   dijnet_bot_cmd_exec
 
