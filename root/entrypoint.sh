@@ -42,7 +42,8 @@ init_cron() {
 
     crontab -u ${USER} ${cronfile}
     rm ${cronfile}
-    echo "INFO: crontab content for user ${USER} is:\n$(crontab -l -u ${USER})"
+    echo "INFO: crontab content for user ${USER} is:"
+    echo $(crontab -l -u ${USER})
 
     # Start cron
     echo "INFO: Starting crond ..."
@@ -72,9 +73,10 @@ init_user() {
   usermod -o -u "${PUID}" ${USER}
 
   echo "INFO: Configuring directories ownership. PUID=${PUID}; PGID=${PGID};"
-  chown -R ${USER}:${GROUP} /data
-  chown -R ${USER}:${GROUP} ${DIJNET_LOG_DIR}
-  chown -R ${USER}:${GROUP} ${DIJNET_PID_DIR}
+  chown ${USER}:${GROUP} /data
+  chown ${USER}:${GROUP} ${DIJNET_CONFIG_DIR}
+  chown ${USER}:${GROUP} ${DIJNET_LOG_DIR}
+  chown ${USER}:${GROUP} ${DIJNET_RUN_DIR}
 }
 
 set -e
