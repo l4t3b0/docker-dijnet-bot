@@ -1,40 +1,7 @@
 #!/bin/sh
 
-healthchecks_io_start() {
-  local url
-
-  if [ ! -z "${HEALTHCHECKS_IO_URL}" ]
-  then
-    url=${HEALTHCHECKS_IO_URL}/start
-    echo "INFO: Sending helatchecks.io start signal to '${url}'"
-
-    set +e
-    curl -SL ${url}
-    set -e
-  fi
-}
-
-healthchecks_io_end() {
-  local return_code=$1
-  local url
-
-  # Wrap up healthchecks.io call with complete or failure signal
-  if [ ! -z "${HEALTHCHECKS_IO_URL}" ]
-  then
-    if [ "${return_code}" == 0 ]
-    then
-      url=${HEALTHCHECKS_IO_URL}
-      echo "INFO: Sending helatchecks.io complete signal to '${url}'"
-    else
-      url=${HEALTHCHECKS_IO_URL}/fail
-      echo "WARNING: Sending helatchecks.io failure signal to '${url}'"
-    fi
-
-    set +e
-    curl -SL ${url}
-    set -e
-  fi
-}
+. /usr/bin/healthchecks_io.sh
+. /usr/bin/logs.sh
 
 is_dijnet_bot_running() {
   if [ $(lsof | grep $0 | wc -l | tr -d ' ') -gt 1 ]
@@ -64,35 +31,26 @@ dijnet_bot_cmd_exec() {
   return ${return_code}
 }
 
-rotate_logs() {
-  # Delete logs by user request
-  if [ ! -z "${LOG_ROTATE##*[!0-9]*}" ]
-  then
-    echo "INFO: Removing logs older than ${LOG_ROTATE} day(s)..."
-    touch ${log_dir}/tmp.log && find ${log_dir}/*.log -mtime +${LOG_ROTATE} -type f -delete && rm -f ${log_dir}/tmp.log
-  fi
-}
-
 set -e
 
-pid_file=${DIJNET_PID_FILE}
-log_dir=${DIJNET_LOG_DIR}
+pid_file=${PID_FILE}
+log_dir=${LOG_DIR}
 
 echo "INFO: Starting $0 pid $$ $(date)"
 
 if is_dijnet_bot_running
 then
-  echo "WARNING: A previous dijnet-bot instance is still running. Skipping command."
+  echo "WARNING: A previous application instance is still running. Skipping command."
 else
   echo $$ > ${pid_file}
   echo "INFO: PID file created successfuly: ${pid_file}"
 
-  echo "INFO: Reading config file: ${DIJNET_CONFIG_FILE}"
-  xargs -a ${DIJNET_CONFIG_FILE} -r
+  echo "INFO: Reading config file: ${CONFIG_FILE}"
+  xargs -a ${CONFIG_FILE} -r
 
-  healthchecks_io_start
+  healthchecks_io_start 
 
-  rotate_logs
+  purge_logs ${log_dir} ${LOG_ROTATE}
 
   dijnet_bot_cmd_exec
 
