@@ -25,6 +25,7 @@ ENV DIJNET_PID_FILE=${DIJNET_PID_DIR}/${USER}.pid
 ENV DIJNET_LOG_DIR=/var/log/${USER}
 
 RUN apk --no-cache add \
+  bash \
   ca-certificates \
   curl \
   nodejs \
