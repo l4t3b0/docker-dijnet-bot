@@ -1,20 +1,5 @@
 #!/bin/bash
 
-eval_cron_shortcuts() {
-  # Re-write cron shortcut
-  case "$(echo "${CRON}" | tr '[:lower:]' '[:upper:]')" in
-    *@YEARLY* ) echo "INFO: Cron shortcut ${CRON} re-written to 0 0 1 1 *" && CRONS="0 0 1 1 *";;
-    *@ANNUALLY* ) echo "INFO: Cron shortcut ${CRON} re-written to 0 0 1 1 *" && CRONS="0 0 1 1 *";;
-    *@MONTHLY* ) echo "INFO: Cron shortcut ${CRON} re-written to 0 0 1 * *" && CRONS="0 0 1 * * ";;
-    *@WEEKLY* ) echo "INFO: Cron shortcut ${CRON} re-written to 0 0 * * 0" && CRONS="0 0 * * 0";;
-    *@DAILY* ) echo "INFO: Cron shortcut ${CRON} re-written to 0 0 * * *" && CRONS="0 0 * * *";;
-    *@MIDNIGHT* ) echo "INFO: Cron shortcut ${CRON} re-written to 0 0 * * *" && CRONS="0 0 * * *";;
-    *@HOURLY* ) echo "INFO: Cron shortcut ${CRON} re-written to 0 * * * *" && CRONS="0 * * * *";;
-    *@* ) echo "WARNING: Cron shortcut ${CRON} is not supported. Stopping." && exit 1;;
-    * ) CRONS=${CRON};;
-  esac
-}
-
 exec_on_startup() {
   if [ -z "${SYNC_ON_STARTUP}" ]
   then
@@ -27,30 +12,44 @@ exec_on_startup() {
 }
 
 init_cron() {
+  local crondlog
+  local cronline
+  local cronfile
+  local crontablog
+
+  cronfile=/tmp/crontab.tmp
+  crontablog=${DIJNET_LOG_DIR}/dijnet-bot-sync.crontab.log 
+  crondlog=${DIJNET_LOG_DIR}/dijnet-bot.crond.log
+
+  # Setup cron schedule
+  crontab -d
+  echo "SHELL=/bin/sh" > ${cronfile}
+
   if [ -z "${CRON}" ]
   then
     echo "INFO: No CRON setting found. Stopping. (Tip: Add CRON=\"0 0 * * *\" to perform sync every midnight)"
-    exit 1
   else
-    # Setup cron schedule
-    crontab -d
-    echo "${CRON} su ${USER} -s /bin/sh -c /usr/bin/dijnet-bot-sync.sh >> ${DIJNET_LOG_DIR}/dijnet-bot.crontab.log 2>&1" > /tmp/crontab.tmp
+    cronline="${CRON} /usr/bin/dijnet-bot-sync.sh >> ${crondtablog} 2>&1"
+    echo ${cronline} >> ${cronfile}
+
     if [ -z "$CRON_ABORT" ]
     then
       echo "INFO: Add CRON_ABORT=\"0 6 * * *\" to cancel outstanding sync at 6am"
     else
-      echo "$CRON_ABORT /usr/bin/dijnet-bot-sync-abort.sh >> ${DIJNET_LOG_DIR}/dijnet-bot-abort.crontab.log 2>&1" >> /tmp/crontab.tmp
+      cronline="${CRON_ABORT} /usr/bin/dijnet-bot-sync-abort.sh >> ${crontablog}2>&1"
+      echo ${cronline} >> ${cronfile}
     fi
-    crontab /tmp/crontab.tmp
-    rm /tmp/crontab.tmp
+
+    crontab -u ${USER} ${cronfile}
+    rm ${cronfile}
+    echo "INFO: crontab content for user ${USER} is:\n$(crontab -l -u ${USER})"
 
     # Start cron
     echo "INFO: Starting crond ..."
-    touch /tmp/sync.log
-    touch /tmp/crond.log
-    crond -b -l 0 -L /tmp/crond.log
+    touch ${crondlog}
+    crond -f -l 0 -L ${crondlog}
     echo "INFO: crond started"
-    tail -F /tmp/crond.log /tmp/sync.log
+    tail -F ${crondlog}
   fi
 }
 
@@ -97,8 +96,6 @@ fi
 init_user
 
 init_timezone
-
-eval_cron_shortcuts
 
 exec_on_startup
 

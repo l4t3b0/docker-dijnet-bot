@@ -7,7 +7,7 @@ ARG DIJNET_VERSION=2.1.7
 
 ENV DIJNET_USER=
 ENV DIJNET_PASS=
-ENV SLEEP=1
+ENV SLEEP=
 ENV LOG_MODE=default
 ENV OUTPUT_DIR=/data
 
@@ -25,14 +25,12 @@ ENV DIJNET_PID_FILE=${DIJNET_PID_DIR}/${USER}.pid
 ENV DIJNET_LOG_DIR=/var/log/${USER}
 
 RUN apk --no-cache add \
-  bash \
   ca-certificates \
   curl \
   nodejs \
   npm \
   shadow \
-  tzdata \
-  wget
+  tzdata
 
 RUN curl -SL https://github.com/juzraai/dijnet-bot/archive/v${DIJNET_VERSION}.tar.gz \
   | tar -xzvC /usr/lib \
@@ -41,14 +39,14 @@ RUN curl -SL https://github.com/juzraai/dijnet-bot/archive/v${DIJNET_VERSION}.ta
 RUN groupadd ${GROUP} && \
   useradd -s /bin/false ${USER} -g ${GROUP}
 
-RUN mkdir /data
+RUN mkdir ${OUTPUT_DIR}
 RUN mkdir ${DIJNET_LOG_DIR} && chown 755 ${DIJNET_LOG_DIR}
 RUN mkdir ${DIJNET_PID_DIR} && chown 755 ${DIJNET_PID_DIR}
 
 COPY root/ /
 
 VOLUME [${DIJNET_LOG_DIR}]
-VOLUME ["/data"]
+VOLUME [${OUTPUT_DIR}]
 
 ENTRYPOINT ["/entrypoint.sh"]
 

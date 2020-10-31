@@ -8,7 +8,9 @@ healthchecks_io_start() {
     url=${HEALTHCHECKS_IO_URL}/start
     echo "INFO: Sending helatchecks.io start signal to '${url}'"
 
-    wget ${url} -O /dev/null
+    set +e
+    curl -SL ${url}
+    set -e
   fi
 }
 
@@ -28,7 +30,9 @@ healthchecks_io_end() {
       echo "WARNING: Sending helatchecks.io failure signal to '${url}'"
     fi
 
-    wget ${url} -O /dev/null
+    set +e
+    curl -SL ${url}
+    set -e
   fi
 }
 
