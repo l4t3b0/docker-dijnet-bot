@@ -31,7 +31,7 @@ Az alábbi környezeti változókkal tudod befolyásolni a dijnet-bot alkalmazá
 
 ```
 docker run -d \
-  --name=unifi-controller \
+  --name=dijnet-bot \
   -e PUID=1000 \
   -e PGID=1000 \
   -e DIJNET_USER="<username>"
