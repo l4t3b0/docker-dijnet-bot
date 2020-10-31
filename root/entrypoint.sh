@@ -34,12 +34,12 @@ init_cron() {
   else
     # Setup cron schedule
     crontab -d
-    echo "${CRON} su ${USER} -s /bin/sh -c /usr/bin/dijnet-bot-sync.sh >> ${DIJNET_LOG_DIR}/dijnet-bot-sync.crontab.log 2>&1" > /tmp/crontab.tmp
+    echo "${CRON} su ${USER} -s /bin/sh -c /usr/bin/dijnet-bot-sync.sh >> ${DIJNET_LOG_DIR}/dijnet-bot.crontab.log 2>&1" > /tmp/crontab.tmp
     if [ -z "$CRON_ABORT" ]
     then
       echo "INFO: Add CRON_ABORT=\"0 6 * * *\" to cancel outstanding sync at 6am"
     else
-      echo "$CRON_ABORT /usr/bin/dijnet-bot-sync-abort.sh >> ${DIJNET_LOG_DIR}/dijnet-bot-sync-abort.crontab.log 2>&1" >> /tmp/crontab.tmp
+      echo "$CRON_ABORT /usr/bin/dijnet-bot-sync-abort.sh >> ${DIJNET_LOG_DIR}/dijnet-bot-abort.crontab.log 2>&1" >> /tmp/crontab.tmp
     fi
     crontab /tmp/crontab.tmp
     rm /tmp/crontab.tmp
