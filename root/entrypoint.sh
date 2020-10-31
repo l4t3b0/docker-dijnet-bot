@@ -1,7 +1,7 @@
 #!/bin/bash
 
 exec_on_startup() {
-  if [ -z "${SYNC_ON_STARTUP}" ]
+  if [ -z "${EXECUTE_ON_STARTUP}" ]
   then
     echo "INFO: Add SYNC_ON_STARTUP=true to perform a sync upon boot"
   else
