@@ -16,7 +16,7 @@ Az alábbi környezeti változókkal tudod befolyásolni a dijnet-bot alkalmazá
 * `SYNC_ON_STARTUP` Ha azt szeretnéd, hogy indítás után automatikusan lefusson a szinkronizáció - ne csak ütemezetten a cron segítségével, akkor adj értéket ennek a változónak (bármit).
 * `CRON` crontab ütemezés beállítása. Például `0 0 * * *`, hogy minden éjfélkor lefusson a szinkronizálás. Támogatottak a következő shortcut-ok is: `@yearly` `@monthly` `@weekly` `@daily` `@hourly`
 * `CRON_ABORT`
-* `HEALTHCHECKS_IO_URL` [healthchecks.io](https://healthchecks.io) url or similar cron monitoring to perform a `GET` after a successful sync
+* `HEALTHCHECKS_IO_URL` [healthchecks.io](https://healthchecks.io) url ami az alkalmazás sikerességének monitorozását teszi lehetővé
 * `LOG_MODE` Naplózás módja:
   * default = terminálban könnyen érthető folyamatjelző, fájlba irányítva bővített napló
   * verbose = bővített napló, minden műveletről tájékoztat
