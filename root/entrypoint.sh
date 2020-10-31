@@ -1,10 +1,10 @@
 #!/bin/bash
 
 shell=/bin/sh
-name=dijnet-bot-sync
-executable=/usr/bin/${name}.sh
+app_name=${APP_NAME}
 app_version=${APP_VERSION}
-cron_executable=/usr/bin/${name}-abort.sh
+executable=/usr/bin/${app_name}-sync.sh
+executable_abort=/usr/bin/${app_name}-sync-abort.sh
 directories=(/data ${CONFIG_DIR} ${LOG_DIR} ${RUN_DIR})
 
 exec_on_startup() {
@@ -25,9 +25,9 @@ init_cron() {
   local crontab_log
 
   crontab_file=$(mktemp)
-  crontab_log=${LOG_DIR}/${name}.crontab.log 
-  crontab_abort_log=${LOG_DIR}/${name}-abort.crontab.log 
-  crond_log=${LOG_DIR}/${name}.crond.log
+  crontab_log=${LOG_DIR}/${app_name}.crontab.log 
+  crontab_abort_log=${LOG_DIR}/${app_name}-abort.crontab.log 
+  crond_log=${LOG_DIR}/${app_name}.crond.log
 
   crontab -d
   echo "SHELL=${shell}" > ${crontab_file}
@@ -44,7 +44,7 @@ init_cron() {
     then
       echo "INFO: Add CRON_ABORT=\"0 6 * * *\" to cancel executable at 6am"
     else
-      crontab_entry="${CRON_ABORT} ${cron_executable} >> ${crontab_abort_log}2>&1"
+      crontab_entry="${CRON_ABORT} ${executable_abort} >> ${crontab_abort_log}2>&1"
       echo ${crontab_entry} >> ${crontab_file}
     fi
 
@@ -97,7 +97,7 @@ init_user() {
 set -e
 
 # Announce version
-echo "INFO: Running ${name} version: ${app_version}"
+echo "INFO: Running ${app_name} version: ${app_version}"
 
 if [ -z "${PGID}" -a ! -z "${PUID}" ] || [ -z "${PUID}" -a ! -z "${PGID}" ]; then
   echo "WARNING: Must supply both PUID and PGID or neither. Stopping."

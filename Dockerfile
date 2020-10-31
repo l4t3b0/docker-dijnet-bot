@@ -3,16 +3,18 @@ FROM ${BASE}
 
 LABEL maintainer="l4t3b0@gmail.com"
 
+ENV APP_VERSION=2.1.7
+ENV APP_NAME=dijnet-bot
+
 ENV USER=dijnet
 ENV GROUP=dijnet
 
-ENV APP_VERSION=2.1.7
+ENV CONFIG_DIR=/etc/${APP_NAME}
+ENV LOG_DIR=/var/log/${APP_NAME}
+ENV RUN_DIR=/var/run/${APP_NAME}
 
-ENV CONFIG_DIR=/etc/dijnet-bot
-ENV CONFIG_FILE=${CONFIG_DIR}/dijnet-bot.conf
-ENV LOG_DIR=/var/log/${USER}
-ENV RUN_DIR=/var/run/${USER}
-ENV PID_FILE=${RUN_DIR}/${USER}.pid
+ENV CONFIG_FILE=${CONFIG_DIR}/${APP_NAME}.conf
+ENV PID_FILE=${RUN_DIR}/${APP_NAME}.pid
 
 ENV EXECUTE_ON_STARTUP=
 
