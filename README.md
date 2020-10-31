@@ -32,9 +32,9 @@ A few environment variables allow you to customize the behavior of rclone:
 * `CRON_ABORT` crontab schedule `0 6 * * *` to abort sync at 6am
 * `HEALTHCHECKS_IO_URL` [healthchecks.io](https://healthchecks.io) url or similar cron monitoring to perform a `GET` after a successful sync
 * `LOG_MODE` Naplózás módja:
-** default = terminálban könnyen érthető folyamatjelző, fájlba irányítva bővített napló
-** verbose = bővített napló, minden műveletről tájékoztat
-** quiet = nincs kimenet
+  * default = terminálban könnyen érthető folyamatjelző, fájlba irányítva bővített napló
+  * verbose = bővített napló, minden műveletről tájékoztat
+  * quiet = nincs kimenet
 * `LOG_ROTATE` set variable to delete logs older than specified days from /var/log/rclone
 * `TZ` set the [timezone](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) to use for the cron and log `Europe/Budapest`
 * `PUID` set variable to specify user to run rclone as.
