@@ -18,7 +18,7 @@ dijnet_bot_cmd_exec() {
   if [ ! -z "$LOG_MODE" ]
   then
     d=$(date +%Y_%m_%d-%H_%M_%S)
-    LOG_FILE="${log_dir}/dijnet-bot-$d.log"
+    LOG_FILE="${LOG_DIR}/dijnet-bot-$d.log"
     CMD="${CMD} > ${LOG_FILE}"
   fi
 
@@ -33,17 +33,14 @@ dijnet_bot_cmd_exec() {
 
 set -e
 
-pid_file=${PID_FILE}
-log_dir=${LOG_DIR}
-
 echo "INFO: Starting $0 pid $$ $(date)"
 
 if is_dijnet_bot_running
 then
   echo "WARNING: A previous application instance is still running. Skipping command."
 else
-  echo $$ > ${pid_file}
-  echo "INFO: PID file created successfuly: ${pid_file}"
+  echo $$ > ${PID_FILE}
+  echo "INFO: PID file created successfuly: ${PID_FILE}"
 
   echo "INFO: Reading config file: ${CONFIG_FILE}"
   set -o allexport
@@ -52,12 +49,12 @@ else
 
   healthchecks_io_start 
 
-  logs_purge ${log_dir} ${LOG_PURGE}
+  logs_purge ${LOG_DIR} ${LOG_PURGE}
 
   dijnet_bot_cmd_exec
 
   healthchecks_io_end $?
 
   echo "INFO: Removing PID file"
-  rm -f ${pid_file}
+  rm -f ${PID_FILE}
 fi

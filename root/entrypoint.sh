@@ -18,6 +18,16 @@ exec_on_startup() {
   fi
 }
 
+init_config_file() {
+  if [ ! -f ${CONFIG_FILE} ]
+  then
+    echo "INFO: Configuration file ${CONFIG_FILE} does not exists. Copyin template file to location"
+    cp /usr/local/dijnet-bot/dijnet-bot.conf.template ${CONFIG_FILE}
+    echo "WARNING: please initialize necessary environment variables in config file and restart the container. Exiting"
+    exit 1
+  fi
+}
+
 init_cron() {
   local crond_log
   local crontab_entry
@@ -106,6 +116,8 @@ elif [ ! -z "${TZ}" -a ! -f /usr/share/zoneinfo/${TZ} ]; then
   echo "WARNING: TZ was set '${TZ}', but corresponding zoneinfo file does not exist. Stopping."
   exit 1
 fi
+
+init_config_file
 
 init_user
 

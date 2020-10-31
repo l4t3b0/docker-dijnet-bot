@@ -1,0 +1,26 @@
+# Díjnet bejelentkezési adatok:
+DIJNET_USER=
+DIJNET_PASS=
+
+# Kimeneti mappa, ahova a számlák fájljai kerüljenek:
+OUTPUT_DIR=/data
+
+# Segédfájlok mappája:
+# Ha nem adod meg (kommentként hagyod) vagy üres értéket adsz neki, akkor nem
+# lesznek ilyen fájlok kimentve. Akkor érdemes bekapcsolni, ha valami hibát dob
+# a program, a kimentett HTML fájlok segíthetnek a probléma javításában.
+#TEMP_DIR=./temp
+
+# Késleltetés a Díjnetnek küldött kérések előtt (másodpercben):
+# Erre azért van szükség, hogy kevésbé terheljük a szervert. Javallott 3-5
+# másodperces értéket beállítani.
+SLEEP=3
+
+# Naplózás módja:
+# default = terminálban könnyen érthető folyamatjelző, fájlba irányítva bővített napló (korábban: LOG_LEVEL=1/2)
+# verbose = bővített napló, minden műveletről tájékoztat (korábban: LOG_LEVEL=4)
+# quiet = nincs kimenet (korábban: LOG_LEVEL=0)
+LOG_MODE=default
+
+# Állítsd be ezt a változót, hogy a paraméterül megadott napnál régebbi logok automatikusan törölve legyenek a /var/log/dijnet-bot könyvtárból
+LOG_PURGE=180
