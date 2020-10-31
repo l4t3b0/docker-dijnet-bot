@@ -29,7 +29,7 @@ init_cron() {
   then
     echo "INFO: No CRON setting found. Stopping. (Tip: Add CRON=\"0 0 * * *\" to perform sync every midnight)"
   else
-    cronline="${CRON} /usr/bin/dijnet-bot-sync.sh >> ${crondtablog} 2>&1"
+    cronline="${CRON} /usr/bin/dijnet-bot-sync.sh >> ${crontablog} 2>&1"
     echo ${cronline} >> ${cronfile}
 
     if [ -z "$CRON_ABORT" ]
