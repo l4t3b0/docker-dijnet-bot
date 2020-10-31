@@ -40,6 +40,8 @@ docker run -d \
   l4t3b0/dijnet-bot
 ```
 
+### Unraid
+Ha ismered és használod az [Unraid](https://unraid.net/) operációs rendszert, akkor szeretném felhívni a figyelmed, hogy van [Unraid docker template](https://github.com/l4t3b0/unraid-docker-templates) ehhez az alkalmazáshoz. 
 ## Changelog
 
 + **2020. november 01.**
