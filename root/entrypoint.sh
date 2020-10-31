@@ -80,7 +80,7 @@ init_user() {
 set -e
 
 # Announce version
-echo "INFO: Running ${DIJNET_VERSION}"
+echo "INFO: Running dijnet-bot version: ${DIJNET_VERSION}"
 
 if [ -z ${DIJNET_USER} ]; then
   echo "ERROR: No DIJNET_USER defined. Stopping."
