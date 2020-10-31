@@ -42,7 +42,7 @@ is_dijnet_bot_running() {
 }
 
 dijnet_bot_cmd_exec() {
-  CMD="dijnet-bot"
+  CMD="time dijnet-bot"
 
   if [ ! -z "$LOG_MODE" ]
   then
@@ -89,9 +89,7 @@ else
 
   dijnet_bot_cmd_exec
 
-  return_code=$?
-
-  healthchecks_io_end ${return_code}
+  healthchecks_io_end $?
 
   echo "INFO: Removing PID file"
   rm -f ${pid_file}

@@ -35,8 +35,8 @@ RUN apk --no-cache add \
   wget
 
 RUN curl -SL https://github.com/juzraai/dijnet-bot/archive/v${DIJNET_VERSION}.tar.gz \
-  | tar -xzvC /tmp \
-  && npm i -g /tmp/dijnet-bot-${DIJNET_VERSION}
+  | tar -xzvC /usr/lib \
+  && npm i -g /usr/lib/dijnet-bot-${DIJNET_VERSION}
 
 RUN groupadd ${GROUP} && \
   useradd -s /bin/false ${USER} -g ${GROUP}
