@@ -87,6 +87,7 @@ else
   echo $$ > ${pid_file}
   echo "INFO: PID file created successfuly: ${pid_file}"
 
+  echo "INFO: Reading config file: ${DIJNET_CONFIG_FILE}"
   xargs -a ${DIJNET_CONFIG_FILE} -r
 
   healthchecks_io_start
