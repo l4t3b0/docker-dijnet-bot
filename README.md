@@ -26,9 +26,28 @@ Az alábbi környezeti változókkal tudod befolyásolni a dijnet-bot alkalmazá
 * `PUID` beállítja a felhasználó azonosítóját, akinek a nevében fusson az alkalmazás
 * `PGID` beállítja a felhasználó csoport azonosítóját, akinek a nevében fusson az alkalmazás
 
-```bash
-$ docker run --rm -it -v $(pwd)/config:/etc/dijnet -v /path/to/destination:/data -e DIJNET_USER="<username>" -e DIJNET_PASS="<password>" -e TZ="Europe/Budapest" -e LOG_MODE="default" -e LOG_ROTATE=1 -e CRON="0 0 * * *" -e CRON_ABORT="0 6 * * *" -e SYNC_ON_STARTUP=1 -e HEALTHCHECKS_IO_URL=https://hchk.io/hchk_uuid l4t3b0/dijnet-bot
+
+### docker cli
+
 ```
+docker run -d \
+  --name=unifi-controller \
+  -e PUID=1000 \
+  -e PGID=1000 \
+  -e DIJNET_USER="<username>"
+  -e DIJNET_PASS="<password>"
+  -e TZ="Europe/Budapest"
+  -e LOG_MODE="default"
+  -e LOG_ROTATE=180
+  -e CRON="@weekly"
+  -e SYNC_ON_STARTUP=1
+  -e HEALTHCHECKS_IO_URL=https://hchk.io/hchk_uuid
+  -v <path to config>:/etc/dijnet
+  -v <path to log>:/var/log/dijnet
+  -v <path to data>:/data
+  l4t3b0/dijnet-bot
+```
+
 ## Changelog
 
 + **2020. november 01.**
