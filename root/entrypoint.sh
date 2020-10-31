@@ -84,10 +84,7 @@ set -e
 # Announce version
 echo "INFO: Running dijnet-bot version: ${DIJNET_VERSION}"
 
-if [ -z ${DIJNET_USER} ]; then
-  echo "ERROR: No DIJNET_USER defined. Stopping."
-  exit 1
-elif [ -z "${PGID}" -a ! -z "${PUID}" ] || [ -z "${PUID}" -a ! -z "${PGID}" ]; then
+if [ -z "${PGID}" -a ! -z "${PUID}" ] || [ -z "${PUID}" -a ! -z "${PGID}" ]; then
   echo "WARNING: Must supply both PUID and PGID or neither. Stopping."
   exit 1
 elif [ ! -z "${TZ}" -a ! -f /usr/share/zoneinfo/${TZ} ]; then
